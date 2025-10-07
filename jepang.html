@@ -1,0 +1,1035 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>QUIZ BAHASA JEPANG BY AZKA X PLACE</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* Warna Dominan: #8B5FBF (Ungu) → #6A5ACD (Ungu Menengah) → #87CEEB (Biru Langit) → #00BFFF (Biru Cerah) */
+
+        /* Global Reset & Font */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Noto Sans JP', sans-serif;
+            transition: background-color 0.3s, color 0.3s, transform 0.2s;
+            /* Perbaikan/Tambahan untuk kompatibilitas sentuh di iOS */
+            -webkit-tap-highlight-color: transparent; /* Menghilangkan highlight biru di Safari */
+        }
+
+        body {
+            background: linear-gradient(135deg, #8B5FBF, #6A5ACD, #87CEEB, #00BFFF);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #333;
+            overflow-x: hidden;
+            position: relative;
+            /* Menambahkan -webkit-overflow-scrolling untuk performa scrolling yang lebih baik di iOS */
+            -webkit-overflow-scrolling: touch;
+        }
+
+        /* Latar Belakang Visuals */
+        .background-visuals {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: -1;
+        }
+
+        /* Siluet Gunung Fuji */
+        .fuji-silhouette {
+            position: absolute;
+            bottom: -100px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 200vw;
+            height: 400px;
+            background: linear-gradient(to top, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0) 50%);
+            clip-path: polygon(0% 100%, 20% 0%, 50% 100%, 70% 0%, 100% 100%);
+            opacity: 0.3;
+        }
+
+        /* Partikel Aksara Transparan (Contoh sederhana dengan pseudo-element) */
+        .character-particles::before {
+            content: 'あいうえお かきくけこ アイウエオ カキクケコ';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            font-size: 30vh;
+            color: rgba(255, 255, 255, 0.05);
+            white-space: pre-wrap;
+            word-break: break-all;
+            line-height: 1.5;
+            animation: particle-flow 120s linear infinite;
+            user-select: none;
+            pointer-events: none;
+        }
+
+        @keyframes particle-flow {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(-50%, -50%); }
+        }
+
+        /* Efek Awan Bergerak */
+        .cloud {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            filter: blur(20px);
+            opacity: 0.5;
+            animation: cloud-move 60s linear infinite;
+            z-index: -10;
+        }
+
+        .cloud-1 {
+            width: 300px;
+            height: 150px;
+            top: 10%;
+            left: -10%;
+            animation-duration: 70s;
+        }
+
+        .cloud-2 {
+            width: 400px;
+            height: 200px;
+            bottom: 20%;
+            right: -20%;
+            animation-duration: 85s;
+        }
+
+        @keyframes cloud-move {
+            0% { transform: translateX(0); }
+            50% { transform: translateX(50px); }
+            100% { transform: translateX(0); }
+        }
+
+
+        /* Konten Utama */
+        .container {
+            background-color: rgba(255, 255, 255, 0.95);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            width: 90%;
+            max-width: 800px;
+            text-align: center;
+            position: relative;
+        }
+
+        /* Header */
+        header {
+            margin-bottom: 30px;
+        }
+
+        header h1 {
+            font-size: 2.5em;
+            color: #6A5ACD;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        header p {
+            font-size: 1.2em;
+            color: #8B5FBF;
+            margin-top: 5px;
+        }
+
+        /* Level Selection & Buttons */
+        .level-selection {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .level-button, #ai-help-btn, #scoreboard-btn, #instructions-btn {
+            padding: 15px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s, background-color 0.2s, box-shadow 0.2s;
+        }
+
+        /* Level Buttons - Ungu/Biru Gradien */
+        .level-button {
+            background-color: #6A5ACD;
+            color: white;
+        }
+
+        .level-button:hover {
+            background-color: #8B5FBF;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+        }
+        /* Tambahan: Sentuhan iOS */
+        .level-button:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Additional Features Buttons - Warna Kontras/Pelengkap */
+        .additional-features {
+            display: flex;
+            justify-content: space-around;
+            gap: 10px;
+        }
+
+        #ai-help-btn, #instructions-btn {
+            flex: 1;
+            background-color: #00BFFF;
+            color: white;
+        }
+        #scoreboard-btn {
+            flex: 1;
+            background-color: #87CEEB;
+            color: #333;
+        }
+
+        #ai-help-btn:hover, #instructions-btn:hover {
+            background-color: #00A3E0;
+            transform: translateY(-2px);
+        }
+        #scoreboard-btn:hover {
+            background-color: #7ACEEB;
+            transform: translateY(-2px);
+        }
+
+        /* Quiz Area */
+        .hidden {
+            display: none;
+        }
+
+        #quiz-area {
+            padding: 20px 0;
+        }
+
+        .quiz-header {
+            margin-bottom: 20px;
+        }
+
+        .progress-bar-container {
+            background-color: #eee;
+            border-radius: 5px;
+            height: 10px;
+            margin: 10px 0;
+            overflow: hidden;
+        }
+
+        #progress-bar {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(to right, #6A5ACD, #00BFFF);
+            transition: width 0.4s ease-in-out;
+        }
+
+        #timer {
+            font-weight: bold;
+            color: #FF6347;
+            margin-top: 10px;
+        }
+
+        .question-box {
+            background-color: #f9f9f9;
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.05);
+        }
+
+        #question-text {
+            font-size: 4em;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 20px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+            min-height: 100px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .kana-display {
+            font-size: 1.2em;
+        }
+        
+        .options-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .option {
+            padding: 12px;
+            border: 2px solid #6A5ACD;
+            border-radius: 8px;
+            cursor: pointer;
+            background-color: white;
+            font-size: 1.1em;
+            font-weight: 500;
+            text-align: left;
+        }
+
+        .option:hover:not(:disabled) {
+            background-color: #f0f0ff;
+            border-color: #8B5FBF;
+            transform: scale(1.02);
+        }
+        /* Tambahan: Sentuhan iOS */
+        .option:active:not(:disabled) {
+            transform: scale(0.98);
+        }
+
+        /* Feedback Styles (Set by JS) */
+        .correct {
+            background-color: #A5D6A7 !important;
+            border-color: #4CAF50 !important;
+            color: #333;
+        }
+
+        .incorrect {
+            background-color: #FFCDD2 !important;
+            border-color: #F44336 !important;
+            color: #333;
+        }
+
+        #feedback {
+            margin-top: 15px;
+            font-style: italic;
+            min-height: 20px;
+        }
+
+        /* Result Area */
+        #result-area {
+            padding: 20px;
+        }
+
+        #result-area h2 {
+            color: #6A5ACD;
+            margin-bottom: 10px;
+        }
+
+        #final-score {
+            font-size: 2em;
+            font-weight: bold;
+            color: #00BFFF;
+        }
+
+        #badge-message {
+            padding: 15px;
+            margin: 20px 0;
+            background-color: #e3f2fd;
+            border-radius: 8px;
+            font-weight: bold;
+            color: #1565C0;
+        }
+
+        #retry-btn, #back-home-btn {
+            margin: 5px;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        #retry-btn {
+            background-color: #6A5ACD;
+            color: white;
+        }
+        #back-home-btn {
+            background-color: #87CEEB;
+            color: #333;
+        }
+
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 10;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(5px);
+            /* Tambahan: Memastikan modal menutupi seluruh viewport di iOS */
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .modal.visible {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            padding: 20px;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 600px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            position: relative;
+            max-height: 80vh;
+            overflow-y: auto;
+            /* Tambahan: Memastikan modal-content bisa di-scroll di iOS */
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .close-btn {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            position: absolute;
+            top: 10px;
+            right: 20px;
+        }
+
+        .close-btn:hover,
+        .close-btn:focus {
+            color: #333;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        /* AI Chat Interface */
+        .ai-chat-interface {
+            margin-top: 20px;
+            padding-top: 15px;
+            border-top: 1px solid #ddd;
+        }
+
+        .chat-output {
+            height: 150px;
+            background-color: #e0f7fa;
+            border: 1px solid #b2ebf2;
+            padding: 10px;
+            overflow-y: auto;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            text-align: left;
+            -webkit-overflow-scrolling: touch; /* Penting untuk scroll di iOS */
+        }
+
+        .ai-message {
+            color: #00796b;
+            font-style: italic;
+        }
+
+        .chat-input-area {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        #user-input {
+            flex-grow: 1;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            min-width: 150px;
+            /* Perbaikan: Mengatasi masalah zoom pada input field di iOS */
+            font-size: 16px; 
+        }
+
+        #send-btn, #generate-ai-response-btn {
+            padding: 8px 15px;
+            background-color: #6A5ACD;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: normal;
+        }
+
+        #send-btn:disabled, #generate-ai-response-btn:disabled {
+            background-color: #aaa;
+            cursor: not-allowed;
+        }
+
+        .ai-prompt-text {
+            font-size: 0.8em;
+            color: #777;
+            width: 100%;
+            text-align: left;
+            margin-top: 5px;
+        }
+
+        /* Music Toggle Button */
+        .music-toggle-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            padding: 10px 15px;
+            background-color: #333;
+            color: white;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            z-index: 100;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            /* Tambahan: Sentuhan iOS */
+            -webkit-tap-highlight-color: rgba(0,0,0,0);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 600px) {
+            header h1 {
+                font-size: 2em;
+            }
+
+            header p {
+                font-size: 1em;
+            }
+
+            .container {
+                padding: 20px;
+                width: 95%;
+            }
+
+            .level-button {
+                font-size: 1em;
+            }
+
+            .additional-features {
+                flex-direction: column;
+            }
+
+            #question-text {
+                font-size: 3em;
+            }
+
+            .option {
+                font-size: 1em;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="background-visuals">
+        <div class="fuji-silhouette"></div>
+        <div class="character-particles"></div>
+        <div class="cloud cloud-1"></div>
+        <div class="cloud cloud-2"></div>
+    </div>
+
+    <div class="container">
+        <header>
+            <h1>QUIZ BAHASA JEPANG</h1>
+            <p>BY AZKA X PLACE</p>
+        </header>
+
+        <main id="homepage">
+            <section class="level-selection">
+                <button class="level-button" data-level="1">
+                    LEVEL 1: Hiragana Dasar
+                </button>
+                <button class="level-button" data-level="2">
+                    LEVEL 2: Hiragana Kombinasi (Tenten, Maru, Yōon)
+                </button>
+                <button class="level-button" data-level="3">
+                    LEVEL 3: Katakana Dasar
+                </button>
+                <button class="level-button" data-level="4">
+                    LEVEL 4: Katakana Lanjutan (Kombinasi & Kata Serapan)
+                </button>
+                <button class="level-button" data-level="5">
+                    LEVEL 5: Mix Challenge (Campuran Hiragana & Katakana)
+                </button>
+            </section>
+
+            <section class="additional-features">
+                <button id="ai-help-btn">CONTOH SOAL & BANTUAN AI</button>
+                <button id="scoreboard-btn" disabled>SCOREBOARD (Segera Hadir)</button>
+                <button id="instructions-btn">PETUNJUK</button>
+            </section>
+        </main>
+
+        <section id="quiz-area" class="hidden">
+            <div class="quiz-header">
+                <h2 id="level-title"></h2>
+                <div class="progress-bar-container">
+                    <div id="progress-bar"></div>
+                </div>
+                <div id="timer" class="hidden">Waktu: <span></span>s</div>
+            </div>
+            <div class="question-box">
+                <p id="question-text"></p>
+                <div class="options-container" id="options-container">
+                    </div>
+            </div>
+            <p id="feedback"></p>
+        </section>
+
+        <section id="result-area" class="hidden">
+            <h2>Hasil Kuis</h2>
+            <p>Skor Anda: <span id="final-score">0</span>/<span id="total-questions">0</span></p>
+            <div id="badge-message"></div>
+            <button id="retry-btn">ULANGI LEVEL</button>
+            <button id="back-home-btn">KEMBALI KE BERANDA</button>
+        </section>
+    </div>
+
+    <div id="ai-modal" class="modal hidden">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <h3>CONTOH SOAL & BANTUAN AI</h3>
+
+            <div class="sample-questions">
+                <h4>Contoh Soal (Level 1, 3, 5):</h4>
+                <ul>
+                    <li>**L1:** Romaji untuk **く** adalah? (Jawaban: ku)</li>
+                    <li>**L3:** Katakana untuk 'te'? (Jawaban: テ)</li>
+                    <li>**L5:** Manakah Hiragana untuk 'ji'? (Jawaban: じ)</li>
+                </ul>
+            </div>
+
+            <div class="ai-chat-interface">
+                <h4>Tutor AI (KAAX-sensei)</h4>
+                <div id="ai-output" class="chat-output">
+                    <p class="ai-message">Halo! Saya KAAX-sensei, tutor AI Anda. Saya siap membantu Anda memahami aksara Jepang. Silakan mulai dengan menanyakan tentang *Hiragana* atau *Katakana*!</p>
+                </div>
+                <div class="chat-input-area">
+                    <input type="text" id="user-input" placeholder="Tanyakan pada KAAX-sensei..." disabled>
+                    <button id="send-btn" disabled>Kirim</button>
+                    <p class="ai-prompt-text">
+                        *Prompt AI: "Anda adalah tutor bahasa Jepang yang sabar dan ramah. Berikan penjelasan sederhana tentang aksara Jepang, perbedaan Hiragana-Katakana, dan tips menghafal. Gunakan bahasa Indonesia yang mudah dipahami pemula."*
+                    </p>
+                    <button id="generate-ai-response-btn">Minta Penjelasan Awal</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="instructions-modal" class="modal hidden">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <h3>PETUNJUK KUIS</h3>
+            <p>Selamat datang di QUIZ BAHASA JEPANG BY KAAXPLACE! Tujuan Anda adalah menebak aksara atau romaji yang benar.</p>
+            <ul>
+                <li>Pilih salah satu dari 5 level kesulitan untuk memulai.</li>
+                <li>Setiap level memiliki 10 soal.</li>
+                <li>Pilih jawaban, dan sistem akan memberikan *feedback* langsung.</li>
+                <li>Gunakan tombol "CONTOH SOAL & BANTUAN AI" jika Anda kesulitan.</li>
+                <li>Skor terbaik Anda akan disimpan secara lokal (diperlukan Local Storage).</li>
+            </ul>
+            <p class="motivation">頑張って! (Ganbatte! - Berjuanglah!)</p>
+        </div>
+    </div>
+
+    <audio id="correct-sound" src="correct.mp3" preload="auto"></audio> 
+    <audio id="incorrect-sound" src="incorrect.mp3" preload="auto"></audio>
+    <audio id="bg-music" src="bgm.mp3" loop></audio> 
+    <button id="toggle-music" class="music-toggle-btn">🔇 Musik</button>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- 1. DATA KUIS (TIDAK BERUBAH) ---
+            const quizData = {
+                1: {
+                    title: "LEVEL 1: Hiragana Dasar (あいうえお, かきくけこ, dll)",
+                    questions: [
+                        { q: "Aksara apa ini? [gambar あ]", options: ["a", "i", "u", "e"], answer: "a", explanation: "Ini adalah aksara Hiragana 'a'." },
+                        { q: "Romaji untuk く adalah?", options: ["ku", "ke", "ko", "ka"], answer: "ku", explanation: "く dibaca 'ku'." },
+                        { q: "Pilih aksara untuk 'shi'", options: ["し", "さ", "す", "せ"], answer: "し", explanation: "し adalah Hiragana untuk 'shi'." },
+                        { q: "Romaji untuk て adalah?", options: ["te", "to", "ta", "tsu"], answer: "te", explanation: "て dibaca 'te'." },
+                        { q: "Aksara untuk 'ho' adalah?", options: ["ほ", "へ", "は", "ひ"], answer: "ほ", explanation: "ほ adalah Hiragana untuk 'ho'." },
+                        { q: "Romaji untuk み adalah?", options: ["mi", "mu", "me", "mo"], answer: "mi", explanation: "み dibaca 'mi'." },
+                        { q: "Aksara apa ini? [gambar ね]", options: ["ne", "no", "na", "ni"], answer: "ne", explanation: "ね adalah Hiragana untuk 'ne'." },
+                        { q: "Romaji untuk り adalah?", options: ["ri", "ra", "ru", "ro"], answer: "ri", explanation: "り dibaca 'ri'." },
+                        { q: "Pilih aksara untuk 'o'", options: ["お", "あ", "い", "う"], answer: "お", explanation: "お adalah Hiragana untuk 'o'." },
+                        { q: "Aksara untuk 'n' (akhir suku kata)?", options: ["ん", "む", "ぬ", "ろ"], answer: "ん", explanation: "ん adalah Hiragana untuk bunyi 'n' atau 'm' di akhir suku kata." },
+                    ]
+                },
+                2: {
+                    title: "LEVEL 2: Hiragana Kombinasi (Tenten, Maru, Yōon)",
+                    questions: [
+                        { q: "Aksara ぎゃ dibaca?", options: ["gya", "ja", "nya", "hya"], answer: "gya", explanation: "ぎゃ adalah kombinasi ぎ (gi) + ゃ (ya kecil), dibaca 'gya'." },
+                        { q: "Romaji 'pyu' dalam Hiragana?", options: ["ぴゅ", "ぴょ", "びゅ", "ぴや"], answer: "ぴゅ", explanation: "ぴゅ adalah kombinasi ぴ (pi dengan maru) + ゅ (yu kecil), dibaca 'pyu'." },
+                        { q: "Aksara ざ dibaca?", options: ["za", "da", "ga", "ba"], answer: "za", explanation: "ざ adalah さ (sa) dengan tenten, dibaca 'za'." },
+                        { q: "Romaji untuk ぢゃ adalah?", options: ["ja", "dya", "zya", "bya"], answer: "ja", explanation: "ぢゃ dibaca 'ja'. Ini adalah varian dari じゃ." },
+                        { q: "Aksara untuk 'bo'?", options: ["ぼ", "ぽ", "ど", "ぞ"], answer: "ぼ", explanation: "ぼ adalah ほ (ho) dengan tenten, dibaca 'bo'." },
+                        { q: "Romaji 'cho' dalam Hiragana?", options: ["ちょ", "ちゅ", "ちゃ", "じょ"], answer: "ちょ", explanation: "ちょ adalah Hiragana untuk 'cho'." },
+                        { q: "Aksara ぶ dibaca?", options: ["bu", "pu", "tsu", "su"], answer: "bu", explanation: "ぶ adalah Hiragana untuk 'bu'." },
+                        { q: "Romaji untuk けい?", options: ["kei", "gei", "ki", "ku"], answer: "kei", explanation: "けい dibaca 'kei'. 'い' panjang berfungsi memanjangkan vokal 'e'." },
+                        { q: "Aksara untuk 'pya'?", options: ["ぴゃ", "びゃ", "ぱ", "ひゃ"], answer: "ぴゃ", explanation: "ぴゃ adalah Hiragana untuk 'pya'." },
+                        { q: "Romaji 'jyo' dalam Hiragana?", options: ["じょ", "ちょ", "しゃ", "ぎょ"], answer: "じょ", explanation: "じょ dibaca 'jyo'." },
+                    ]
+                },
+                3: {
+                    title: "LEVEL 3: Katakana Dasar (アイウエオ, カキクケコ, dll)",
+                    questions: [
+                        { q: "Aksara ア dibaca?", options: ["a", "i", "u", "e"], answer: "a", explanation: "Ini adalah aksara Katakana 'a'." },
+                        { q: "Katakana untuk 'te'?", options: ["テ", "タ", "ツ", "ト"], answer: "テ", explanation: "テ adalah Katakana untuk 'te'." },
+                        { q: "Romaji untuk ス adalah?", options: ["su", "tsu", "shi", "se"], answer: "su", explanation: "ス dibaca 'su'." },
+                        { q: "Aksara untuk 're'?", options: ["レ", "ラ", "ル", "ロ"], answer: "レ", explanation: "レ adalah Katakana untuk 're'." },
+                        { q: "Romaji untuk シ adalah?", options: ["shi", "tsu", "chi", "sa"], answer: "shi", explanation: "シ dibaca 'shi'." },
+                        { q: "Katakana untuk 'n' (akhir suku kata)?", options: ["ン", "ム", "ヌ", "ロ"], answer: "ン", explanation: "ン adalah Katakana untuk 'n'." },
+                        { q: "Aksara apa ini? [gambar マ]", options: ["ma", "mi", "mu", "me"], answer: "ma", explanation: "マ adalah Katakana untuk 'ma'." },
+                        { q: "Romaji untuk コ adalah?", options: ["ko", "ku", "ki", "ka"], answer: "ko", explanation: "コ dibaca 'ko'." },
+                        { q: "Pilih aksara untuk 'u'", options: ["ウ", "ア", "イ", "エ"], answer: "ウ", explanation: "ウ adalah Katakana untuk 'u'." },
+                        { q: "Katakana untuk 'ki'?", options: ["キ", "ク", "ケ", "コ"], answer: "キ", explanation: "キ adalah Katakana untuk 'ki'." },
+                    ]
+                },
+                4: {
+                    title: "LEVEL 4: Katakana Lanjutan (Kombinasi & Kata Serapan)",
+                    questions: [
+                        { q: "Aksara ファ dibaca?", options: ["fa", "fya", "hua", "wa"], answer: "fa", explanation: "ファ adalah kombinasi フ (fu) + ァ (a kecil), digunakan untuk bunyi 'fa' dalam kata serapan." },
+                        { q: "Kata 'Table' dalam Katakana?", options: ["テーブル", "タブル", "テブル", "ターブル"], answer: "テーブル", explanation: "テーブル (Tēburu) adalah cara penulisan 'Table'. Tanda ー memanjangkan vokal 'e'." },
+                        { q: "Aksara ティ dibaca?", options: ["ti", "teyi", "chi", "di"], answer: "ti", explanation: "ティ adalah Katakana untuk 'ti'." },
+                        { q: "Romaji untuk シェ adalah?", options: ["she", "che", "tsu", "ze"], answer: "she", explanation: "シェ dibaca 'she'." },
+                        { q: "Katakana untuk 'vo'?", options: ["ヴォ", "ボ", "フォ", "ゾ"], answer: "ヴォ", explanation: "ヴォ (Vo) adalah Katakana untuk 'vo' (huruf V dalam kata asing)." },
+                        { q: "Kata 'Coffee' dalam Katakana?", options: ["コーヒー", "コフィ", "カフィー", "コーヒ"], answer: "コーヒー", explanation: "コーヒー (Kōhī) adalah 'Coffee'. Tanda ー memanjangkan vokal." },
+                        { q: "Romaji untuk ウィ adalah?", options: ["wi", "we", "ui", "vi"], answer: "wi", explanation: "ウィ dibaca 'wi'." },
+                        { q: "Aksara apa ini? [gambar ジャ]", options: ["ja", "zya", "sha", "cha"], answer: "ja", explanation: "ジャ dibaca 'ja'." },
+                        { q: "Katakana untuk 'di'?", options: ["ディ", "デ", "チ", "ジ"], answer: "ディ", explanation: "ディ adalah Katakana untuk 'di'." },
+                        { q: "Romaji 'Shampoo' dalam Katakana?", options: ["シャンプー", "シャンプ", "シャムプー", "シャンポー"], answer: "シャンプー", explanation: "シャンプー (Shanpū) adalah 'Shampoo'." },
+                    ]
+                },
+                5: {
+                    title: "LEVEL 5: Mix Challenge (Campuran Hiragana & Katakana)",
+                    questions: [
+                        { q: "Manakah Hiragana untuk 'ji'?", options: ["じ", "ジ", "ず", "ズ"], answer: "じ", explanation: "じ adalah Hiragana untuk 'ji'. ジ adalah Katakana." },
+                        { q: "Manakah Katakana untuk 'fu'?", options: ["フ", "ふ", "プ", "ぷ"], answer: "フ", explanation: "フ adalah Katakana untuk 'fu'. ふ adalah Hiragana." },
+                        { q: "Romaji untuk 'do' (Hiragana)?", options: ["ど", "ド", "と", "ト"], answer: "ど", explanation: "ど adalah Hiragana untuk 'do'." },
+                        { q: "Pilih Katakana untuk 'ka'", options: ["カ", "か", "ガ", "が"], answer: "カ", explanation: "カ adalah Katakana untuk 'ka'." },
+                        { q: "Aksara apa ini? [gambar ぜ]", options: ["ze (Hiragana)", "ze (Katakana)", "se (Hiragana)", "se (Katakana)"], answer: "ze (Hiragana)", explanation: "ぜ adalah Hiragana untuk 'ze'." },
+                        { q: "Romaji 'su' (Katakana)?", options: ["ス", "す", "ツ", "つ"], answer: "ス", explanation: "ス adalah Katakana untuk 'su'." },
+                        { q: "Manakah yang benar untuk 'Sensei'?", options: ["せんせい", "センセイ", "せんセい", "セんセい"], answer: "せんせい", explanation: "Kata asli Jepang seperti Sensei ditulis dengan Hiragana." },
+                        { q: "Manakah yang benar untuk 'Computer'?", options: ["コンピュータ", "こんぴゅーた", "コンピュタ", "コンピュウタ"], answer: "コンピュータ", explanation: "Kata serapan dari bahasa asing (gairaigo) ditulis dengan Katakana." },
+                        { q: "Aksara 'kyu' dalam Katakana?", options: ["キュ", "きゅ", "キョ", "きょ"], answer: "キュ", explanation: "キュ adalah Katakana untuk 'kyu'." },
+                        { q: "Aksara 'nya' dalam Hiragana?", options: ["にゃ", "ニャ", "な", "ナ"], answer: "にゃ", explanation: "にゃ adalah Hiragana untuk 'nya'." },
+                    ]
+                }
+            };
+
+            // --- 2. ELEMEN DOM (TIDAK BERUBAH) ---
+            const homepage = document.getElementById('homepage');
+            const quizArea = document.getElementById('quiz-area');
+            const resultArea = document.getElementById('result-area');
+            const levelTitle = document.getElementById('level-title');
+            const questionText = document.getElementById('question-text');
+            const optionsContainer = document.getElementById('options-container');
+            const feedbackText = document.getElementById('feedback');
+            const progressBar = document.getElementById('progress-bar');
+            const finalScore = document.getElementById('final-score');
+            const totalQuestions = document.getElementById('total-questions');
+            const badgeMessage = document.getElementById('badge-message');
+            
+            const levelButtons = document.querySelectorAll('.level-button');
+            const retryBtn = document.getElementById('retry-btn');
+            const backHomeBtn = document.getElementById('back-home-btn');
+
+            // Modals
+            const aiModal = document.getElementById('ai-modal');
+            const aiHelpBtn = document.getElementById('ai-help-btn');
+            const instructionsModal = document.getElementById('instructions-modal');
+            const instructionsBtn = document.getElementById('instructions-btn');
+            const modalCloseButtons = document.querySelectorAll('.close-btn');
+
+            // AI Features
+            const aiOutput = document.getElementById('ai-output');
+            const generateAiResponseBtn = document.getElementById('generate-ai-response-btn');
+
+            // Audio & Music
+            const correctSound = document.getElementById('correct-sound');
+            const incorrectSound = document.getElementById('incorrect-sound');
+            const bgMusic = document.getElementById('bg-music');
+            const toggleMusicBtn = document.getElementById('toggle-music');
+
+            // --- 3. VARIABEL STATE KUIS ---
+            let currentLevel = null;
+            let currentQuestionIndex = 0;
+            let score = 0;
+            let isMusicPlaying = false; 
+            
+            // --- 4. FUNGSI NAVIGASI & LOGIKA KUIS ---
+
+            function showSection(section) {
+                homepage.classList.add('hidden');
+                quizArea.classList.add('hidden');
+                resultArea.classList.add('hidden');
+
+                section.classList.remove('hidden');
+            }
+
+            function startQuiz(level) {
+                currentLevel = level;
+                currentQuestionIndex = 0;
+                score = 0;
+                
+                // Acak urutan soal
+                quizData[level].questions.sort(() => Math.random() - 0.5);
+
+                showSection(quizArea);
+                levelTitle.textContent = quizData[level].title;
+                totalQuestions.textContent = quizData[level].questions.length;
+                
+                loadQuestion();
+            }
+
+            function playSound(audioElement) {
+                // Perbaikan untuk memastikan suara pendek selalu dimainkan, terutama di iOS/Safari
+                audioElement.currentTime = 0; 
+                audioElement.play().catch(e => console.log('Audio play failed:', e));
+            }
+
+            function loadQuestion() {
+                if (currentQuestionIndex >= quizData[currentLevel].questions.length) {
+                    showResults();
+                    return;
+                }
+
+                const currentQ = quizData[currentLevel].questions[currentQuestionIndex];
+                
+                // Reset tampilan
+                feedbackText.textContent = '';
+                optionsContainer.innerHTML = '';
+                
+                // Tampilkan teks pertanyaan. Ganti [gambar X] dengan aksara itu sendiri dan beri style khusus.
+                const qText = currentQ.q.replace(/\[gambar (.*?)\]/g, (match, p1) => `<span class="kana-display">${p1}</span>`);
+                questionText.innerHTML = qText;
+
+                // Tampilkan pilihan jawaban
+                const shuffledOptions = currentQ.options.slice();
+                shuffledOptions.sort(() => Math.random() - 0.5); // Acak pilihan
+
+                shuffledOptions.forEach(optionText => {
+                    const optionBtn = document.createElement('button');
+                    optionBtn.classList.add('option');
+                    optionBtn.textContent = optionText;
+                    optionBtn.onclick = () => handleAnswer(optionText, currentQ.answer, currentQ.explanation);
+                    optionsContainer.appendChild(optionBtn);
+                });
+
+                // Update Progress Bar
+                const progressPercent = (currentQuestionIndex / quizData[currentLevel].questions.length) * 100;
+                progressBar.style.width = `${progressPercent}%`;
+            }
+
+            function handleAnswer(selectedOption, correctAnswer, explanation) {
+                // Nonaktifkan semua tombol setelah memilih
+                Array.from(optionsContainer.children).forEach(btn => btn.disabled = true);
+
+                const isCorrect = selectedOption === correctAnswer;
+                
+                // Cari tombol yang diklik
+                const selectedButton = Array.from(optionsContainer.children).find(btn => btn.textContent === selectedOption);
+
+                if (isCorrect) {
+                    score++;
+                    feedbackText.innerHTML = `✅ **Benar!** ${explanation}`;
+                    if(selectedButton) selectedButton.classList.add('correct');
+                    playSound(correctSound); // Menggunakan fungsi playSound yang diperbarui
+                } else {
+                    feedbackText.innerHTML = `❌ **Salah!** Jawaban yang benar adalah **${correctAnswer}**. ${explanation}`;
+                    if(selectedButton) selectedButton.classList.add('incorrect');
+                    playSound(incorrectSound); // Menggunakan fungsi playSound yang diperbarui
+                    
+                    // Sorot jawaban yang benar
+                    Array.from(optionsContainer.children).forEach(btn => {
+                        if (btn.textContent === correctAnswer) {
+                            btn.classList.add('correct');
+                        }
+                    });
+                }
+                
+                // Lanjut ke soal berikutnya setelah jeda
+                setTimeout(() => {
+                    currentQuestionIndex++;
+                    loadQuestion();
+                }, 2000); // Jeda 2 detik
+            }
+
+            function showResults() {
+                progressBar.style.width = '100%'; // Selesaikan progress bar
+
+                showSection(resultArea);
+                finalScore.textContent = score;
+                totalQuestions.textContent = quizData[currentLevel].questions.length;
+
+                const totalQ = quizData[currentLevel].questions.length;
+                const percentage = (score / totalQ) * 100;
+                let badge = "";
+
+                // Logika Badge Motivasi
+                if (percentage === 100) {
+                    badge = `Luar biasa! 👑 Anda menguasai Level ${currentLevel} dengan sempurna! Keep up the great work!`;
+                } else if (percentage >= 80) {
+                    badge = `Hebat! 🌟 Anda mendapatkan skor tinggi. Sedikit lagi menuju sempurna!`;
+                } else if (percentage >= 50) {
+                    badge = `Bagus! 👍 Anda melewati batas. Terus berlatih untuk skor yang lebih baik!`;
+                } else {
+                    badge = `Jangan menyerah! 💪 Aksara Jepang memang menantang. Coba ulangi kuis dan pelajari lagi!`;
+                }
+                
+                badgeMessage.textContent = badge;
+                
+                // Simpan High Score (Sederhana menggunakan Local Storage)
+                const currentHighScore = localStorage.getItem(`highScoreLevel${currentLevel}`) || 0;
+                if (score > parseInt(currentHighScore)) {
+                    localStorage.setItem(`highScoreLevel${currentLevel}`, score);
+                    // Tambahkan notifikasi high score baru (opsional)
+                }
+            }
+
+            // --- 5. EVENT LISTENERS UTAMA (TIDAK BERUBAH) ---
+
+            // Level Selection
+            levelButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const level = parseInt(button.dataset.level);
+                    startQuiz(level);
+                });
+            });
+
+            // Result Buttons
+            retryBtn.addEventListener('click', () => {
+                startQuiz(currentLevel);
+            });
+
+            backHomeBtn.addEventListener('click', () => {
+                showSection(homepage);
+            });
+            
+            // --- 6. LOGIKA MODAL (AI & PETUNJUK) (TIDAK BERUBAH) ---
+
+            // Buka Modal
+            aiHelpBtn.addEventListener('click', () => {
+                aiModal.classList.add('visible');
+            });
+
+            instructionsBtn.addEventListener('click', () => {
+                instructionsModal.classList.add('visible');
+            });
+
+            // Tutup Modal
+            modalCloseButtons.forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.target.closest('.modal').classList.remove('visible');
+                });
+            });
+
+            // Tutup Modal dengan klik di luar
+            window.addEventListener('click', (e) => {
+                if (e.target === aiModal) {
+                    aiModal.classList.remove('visible');
+                }
+                if (e.target === instructionsModal) {
+                    instructionsModal.classList.remove('visible');
+                }
+            });
+
+            // --- 7. SIMULASI FITUR BANTUAN AI (TIDAK BERUBAH) ---
+            
+            // Simulasi Respon AI Tutor
+            const aiTutorResponse = {
+                initial: `Selamat datang di dunia Bahasa Jepang! Saya KAAX-sensei, tutor AI Anda. 🤓
+
+**Aksara Jepang**
+Ada tiga jenis aksara utama: **Hiragana** (untuk kata asli Jepang), **Katakana** (untuk kata serapan asing), dan **Kanji** (karakter Tiongkok).
+
+**Perbedaan Hiragana vs Katakana**
+* **Hiragana:** Bentuknya lebih bulat dan mengalir. Digunakan untuk menulis kata asli Jepang, partikel, dan infleksi kata kerja. (Contoh: さくら - Sakura/bunga ceri)
+* **Katakana:** Bentuknya lebih kaku dan bersudut. Digunakan untuk kata serapan (gairaigo) seperti komputer (コンピュータ), nama asing, dan untuk penekanan (mirip *italics*).
+
+**Tips Menghafal**
+1.  **Gunakan Mnemonik (Jembatan Keledai):** Kaitkan bentuk aksara dengan gambar atau cerita yang mudah diingat.
+2.  **Tulis Berulang-ulang:** Menulis adalah cara terbaik untuk melatih memori otot Anda.
+3.  **Gunakan Flashcards:** Uji diri Anda secara teratur.
+
+Anda bisa bertanya lebih detail tentang aksara tertentu!`,
+                hiragana: "Hiragana adalah 'ABC' dasar Jepang. Total ada 46 karakter dasar. Bentuknya bulat, dan digunakan untuk menulis grammar, partikel, dan kata Jepang asli. Mulailah dengan 5 vokal: あ, い, う, え, お! 🌸",
+                katakana: "Katakana digunakan untuk kata-kata yang datang dari luar Jepang (seperti 'game' menjadi ゲーム - Gēmu). Bentuknya lebih 'patah' atau persegi. Jika Anda melihat kata asing di Jepang, itu pasti Katakana! 📝",
+                default: "Maaf, KAAX-sensei sedang belajar soal baru! Saya hanya bisa menjelaskan konsep dasar Hiragana, Katakana, dan tips menghafal saat ini. Silakan coba kata kunci: 'hiragana', 'katakana', atau klik 'Minta Penjelasan Awal'."
+            };
+
+            generateAiResponseBtn.addEventListener('click', () => {
+                aiOutput.innerHTML = `<p class="ai-message">**KAAX-sensei:** ${aiTutorResponse.initial}</p>`;
+                // Setelah penjelasan awal, aktifkan input chat (simulasi)
+                document.getElementById('user-input').disabled = false;
+                document.getElementById('send-btn').disabled = false;
+                generateAiResponseBtn.disabled = true;
+                aiOutput.scrollTop = aiOutput.scrollHeight; // Scroll ke bawah
+            });
+
+            // Simulasi Chat Input
+            document.getElementById('send-btn').addEventListener('click', simulateChat);
+            document.getElementById('user-input').addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    simulateChat();
+                }
+            });
+
+            function simulateChat() {
+                const inputField = document.getElementById('user-input');
+                const input = inputField.value.toLowerCase().trim();
+                let response = "";
+                
+                if (input === "") return;
+
+                // Tampilkan pesan pengguna
+                aiOutput.innerHTML += `<p class="user-message" style="text-align: right; color: #6A5ACD;">**Anda:** ${input}</p>`;
+                inputField.value = ''; // Kosongkan input
+
+                if (input.includes('hiragana')) {
+                    response = aiTutorResponse.hiragana;
+                } else if (input.includes('katakana')) {
+                    response = aiTutorResponse.katakana;
+                } else if (input.includes('tips') || input.includes('menghafal')) {
+                    // Cukup berikan kembali penjelasan awal karena tips ada di sana
+                    response = aiTutorResponse.initial.substring(aiTutorResponse.initial.indexOf('**Tips Menghafal**'));
+                } else {
+                    response = aiTutorResponse.default;
+                }
+
+                // Tampilkan pesan AI (dengan jeda)
+                setTimeout(() => {
+                    aiOutput.innerHTML += `<p class="ai-message">**KAAX-sensei:** ${response}</p>`;
+                    aiOutput.scrollTop = aiOutput.scrollHeight; // Scroll ke bawah
+                }, 500);
+            }
+
+            // --- 8. FITUR TEKNIS LAIN (Musik) ---
+
+            toggleMusicBtn.addEventListener('click', () => {
+                if (isMusicPlaying) {
+                    bgMusic.pause();
+                    toggleMusicBtn.textContent = '🔇 Musik';
+                } else {
+                    // Penanganan janji (Promise) untuk pemutaran audio, yang diperlukan oleh Safari/iOS
+                    bgMusic.play().then(() => {
+                        // Berhasil diputar
+                        toggleMusicBtn.textContent = '🎶 Musik';
+                        isMusicPlaying = true;
+                    }).catch(error => {
+                        // Gagal (misalnya, karena volume disenyapkan atau pembatasan autoplay)
+                        console.error("Gagal memutar musik: ", error);
+                        alert("Tidak dapat memutar musik secara otomatis. Pastikan mode senyap (silent mode) iPhone Anda nonaktif dan volume dinaikkan.");
+                        toggleMusicBtn.textContent = '🔇 Musik (Gagal)';
+                        isMusicPlaying = false;
+                    });
+                }
+            });
+
+            // Panggil fungsi untuk menampilkan homepage saat pertama kali dimuat
+            showSection(homepage);
+        });
+    </script>
+</body>
+</html>
